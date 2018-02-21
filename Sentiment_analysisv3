@@ -1,0 +1,187 @@
+import pandas as pd
+import numpy as np
+import copy
+
+dataset7nn = pd.read_csv("C:\\rt-polarity.neg",delimiter= "\t", index_col= False, encoding="ISO-8859-1")
+Sentimentt = np.zeros(len(dataset7nn))
+dataset7nn["Sentiment"] = Sentimentt
+dataset7nn.columns = ["Text","Sentiment"]
+dataset7nn.shape
+del Sentiment
+print(dataset7nn)
+
+#pos
+dataset7np = pd.read_csv("C:\\rt-polarity.pos",delimiter= "\t", index_col= False, encoding="ISO-8859-1")
+#del dataset7np
+t = copy.copy(Sentimentt)
+print(t)
+len(t)
+for i in range(0, len(t)):
+    t[i] = 1
+
+    
+t = np.asarray(t)
+dataset7np["Sentiment"] = t
+dataset7np.shape
+dataset7np.columns = ["Text","Sentiment"]
+print(dataset7np)
+type(dataset7np)
+
+# joining them
+frames = [dataset7nn, dataset7np]
+datasetv3 = pd.concat(frames, axis=0)
+print(datasetv3.head())
+datasetr.shape
+type(datasetr)
+#shuffling the dataset( because the original dataset contained all positive sentiments
+# at first then all negative sentiments)
+import random
+
+shuffled_datasetv3 = datasetv3.sample(frac=1, random_state=5)
+print(shuffled_datasetr.iloc[8])
+#X7n= shuffled_dataset7n.iloc[0:,1]
+Xv3= shuffled_datasetv3.iloc[0:,0]
+Yv3 = shuffled_datasetv3.iloc[0:,1]
+Xr.shape
+print(Yr)
+type(Yr)
+
+# tokenizing the dataset( i.e. removing non-letters, stopwords, tokenize)
+import nltk
+from nltk.corpus import stopwords
+stop_words = set(stopwords.words('english'))
+#nltk.download('stopwords')
+
+def tokkenize(data):
+    #remove non letters
+    for i in range(0, len(data)):
+        text = re.sub("[^a-zA-Z]", " ", str(data.iloc[i]))
+        textt = text.lower()
+        tokkens = nltk.word_tokenize(textt)
+        for j in tokkens:
+            if j in stop_words:
+                tokkens.remove(j)# remove stop words
+        
+        data.iloc[i]= tokkens
+    return data
+
+
+
+X_tokenizedv3 = tokkenize(Xv3)# type: pandas.core.series.Series
+print(X_tokenizedv3.head())
+type(X_tokenizedv3.iloc[1])
+b= []
+for i in range(0, len(X_tokenizedv3)):
+    #for l in range(0, len(X_tokenizedv3.ilo[i])):
+    a = len(X_tokenizedv3.iloc[i])    
+    b.append(a)
+    
+len(b)
+c = np.asarray(b)
+mean = np.mean(c)
+print(mean)
+print(min(c))
+print(b.index(min(b)))
+print(b[960])
+print(X_tokenizedv3.iloc[959])
+
+##now creating a corpus of word vectors of whole dataset X
+#pip.main(["install","gensim"])
+import gensim
+from gensim import corpora, models, similarities
+del w2vr
+w2vr = gensim.models.Word2Vec(X_tokenizedr, min_count=1, size=50)
+#w2v.most_similar("like")
+X_vecsr = w2vr.wv
+print(X_vecsr["good"])
+type(X_vecsr["good"])
+
+# assigning a vector to each word in a sentence
+X_tokenized2v3 = copy.copy(X_tokenizedv3)
+print(X_tokenized2.iloc[3][1])
+type(X_vecs["good"])
+
+
+def assigner(data):
+    for i in range(0,len(data)):
+        for k in range(0,len(data.iloc[i])):
+            if data.iloc[i][k] not in X_vecsr:
+                data.iloc[i][k] = np.zeros(50)
+            else:
+                s = X_vecsr[data.iloc[i][k]]
+                data.iloc[i][k] = s
+
+    return data
+                        
+            
+
+X_assignedv3 = assigner(X_tokenized2v3)
+print(X_assigned)
+X_assignedr.shape
+#del X_assigned
+len(X_assignedr)
+# converting list of arrays into arrays of arrays and also obtaining the average vector
+del numr
+numv3 = np.zeros(shape = (len(X_assignedv3),50))
+numv3.shape
+type(num)
+print(num[4148][3])
+
+def mean_vectorv3(data):
+    for i in range(0,len(data)):
+        m= data.iloc[i]
+        mm = np.asarray(m)
+        meann = mm.mean(axis=0)
+        for l in range(0, len(meann)):
+            numv3[i][l] = meann[l]
+        
+        #data.iloc[i] = meann
+    return numv3
+
+
+X_input_tomodelv3 = mean_vectorv3(X_assignedv3)# type: numpy array
+print(X_input_tomodelv3)
+type(X_input_tomodel)
+X_input_tomodelv3.shape
+len(X_input_tomodelv3[56])
+del Y_testr
+##scaling the vector(mean=0 and std=1) and creating training, validation and test dataset
+import keras
+from sklearn.preprocessing import scale
+X_input_tomodel_scaledv3 = scale(X_input_tomodelv3)
+Y_finalv3 = keras.utils.np_utils.to_categorical(Yv3)
+from sklearn.cross_validation import train_test_split
+x_trainv3, X_testv3, y_trainv3, Y_testv3 = train_test_split(X_input_tomodel_scaledv3, Y_finalv3, test_size = 0.8)
+#x_testv3, x_valv3, y_testv3, y_valv3 = train_test_split(X_testr, Y_testr, test_size = 0.0)
+print(x_train)
+print(y_train)
+x_trainr.shape
+y_trainr.shape
+type(y_trainr)
+x_train_np = np.asarray(x_train)
+y_val.shape
+# data input to neural network(model)
+#pip.main(["install","keras"])
+import keras
+from keras.models import Sequential
+from keras.layers import Dense, Activation
+del modelr
+modelr = Sequential()
+modelr.add(Dense(40, activation="relu", input_dim = 50))
+modelr.add(Dense(24, activation="relu"))
+modelr.add(Dense(15, activation="softmax"))
+modelr.add(Dense(8, activation="softmax"))
+modelr.add(Dense(2, activation="softmax"))
+modelr.compile(optimizer= "adam",loss="categorical_crossentropy",metrics=["accuracy"])
+modelr.fit(x_trainr, y_trainr, epochs=8, batch_size=32)
+modelr.summary()
+scorer = modelr.evaluate(x_valr,y_valr, batch_size=32, verbose=2)
+print(scorer[1])
+x_trainr.shape
+y_valr.shape
+
+y_test.shape
+type(y_test)
+score2 = model.evaluate(x_test, y_test, batch_size=128, verbose=2)
+print(score2[1]) # obtained 96% accuracy
+
